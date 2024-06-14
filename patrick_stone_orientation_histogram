@@ -1,0 +1,18 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+df = pd.read_csv('MSDS-Orientation-Computer-Survey(in).csv')
+df['GPU CUDA Number of Cores (int)'] = df['GPU CUDA Number of Cores (int)'].fillna(0)
+zeros_count = df[df['GPU CUDA Number of Cores (int)'] == 0].shape[0]
+df_nonzero = df[df['GPU CUDA Number of Cores (int)'] > 0]
+df_nonzero['log_cuda_cores'] = np.log10(df['GPU CUDA Number of Cores (int)'])
+plt.hist(df_nonzero['log_cuda_cores'], bins=20, edgecolor='black')
+plt.bar(0, zeros_count, width=0.1, color='red', edgecolor='black', label='Zero CUDA Cores')
+plt.title('Histogram of CUDA Cores')
+plt.xlabel('Number of CUDA Cores (Log10)')
+plt.ylabel('Frequency')
+ticks = [0, 1, 2, 3, 4, 5, 6]
+tick_labels = ['0', '10', '100', '1k', '10k', '100k', '1M']
+plt.xticks(ticks, tick_labels)
+plt.show()
